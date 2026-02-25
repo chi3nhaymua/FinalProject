@@ -12,6 +12,16 @@ class order:
         self.status = status
         self.total_price = self.calculate_total_price()
 
+    def to_dict(self):
+        return {
+            'order_id': self.order_id,
+            'user': self.user,
+            'booklist': self.Booklist,
+            'borrow date': self.borrow_date,
+            'return date': self.return_date,
+            'status': self.status,
+        }
+
     def calculate_total_price(self):
         days = (self.return_date - self.borrow_date).days
         return sum(book.price * days for book in self.Booklist)
