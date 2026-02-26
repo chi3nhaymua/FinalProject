@@ -5,8 +5,7 @@
     "gender": "Nữ",
     "birth": "7/8/2000",
     "phone": "0978249621",
-    "address": "Hồ Chí Minh",
-    "books": ["B002"]
+    "address": "Hồ Chí Minh"
   },
   {
     "reader_id": "R002",
@@ -14,8 +13,7 @@
     "gender": "Nữ",
     "birth": "10/8/2005",
     "phone": "0945862556",
-    "address": "An Giang",
-    "books": ["B004", "B010"]
+    "address": "An Giang"
   },
   {
     "reader_id": "R003",
@@ -23,8 +21,7 @@
     "gender": "Nam",
     "birth": "18/3/2002",
     "phone": "0923078992",
-    "address": "Cần Thơ",
-    "books": ["B011", "B008", "B004"]
+    "address": "Cần Thơ"
   },
   {
     "reader_id": "R004",
@@ -32,7 +29,6 @@
     "gender": "Nam",
     "birth": "28/9/2006",
     "phone": "0923456789",
-    "address": "Hồ Chí Minh",
-    "books": ["B013"]
+    "address": "Hồ Chí Minh"
   }
 ]
