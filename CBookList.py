@@ -1,77 +1,72 @@
-from Models.CBook import Book
-from JsonFactory import *
+from Models.CBook import *
+from Dataset.JsonFactory import *
 
 class BookList:
     def __init__(self):
         self.book_list = []
-        self.file = "data/Book.json"
-        self.load_books()
+        self.file = "../Dataset/Books.json"
+        self.load_book()
 
-    def load_books(self):
+    def load_book (self):
         data = JsonFileFactory.read_data(self.file)
         self.book_list = []
 
         for item in data:
             book = Book(
-                item["book_id"],
-                item["book_name"],
-                item["author"],
-                item["type"],
-                item["published_year"],
-                item["price"],
-                item["quantity"]
+                item.get("book_id", ""),
+                item.get("book_name", ""),
+                item.get("author", ""),
+                item.get("type", ""),
+                item.get("published_year", 0),
+                item.get("price", 0),
+                item.get("quantity", 0)
             )
             self.book_list.append(book)
 
     def get_all_books(self):
         return self.book_list
 
-    def save_books(self):
-        data = [book.to_dict() for book in self.book_list]
-        JsonFileFactory.write_data(self.file, data)
+    def save_book(self):
+        JsonFileFactory.write_data(self.file, [book.to_dict() for book in self.book_list])
 
     def add_book(self, book):
         for b in self.book_list:
              if str(b.book_id) == str(book.book_id): # Tránh 1 =! 001
-                return "Sách đã tồn tại!"
+                return False, "Sách đã tồn tại!"
         self.book_list.append(book)
-        self.save_books()  # Lưu lại sau khi thêm
-        return "Thêm sách thành công!"
+        self.save_book()  # Lưu lại sau khi thêm
+        return True, "Thêm sách thành công!"
 
     def delete_book(self, book_id):
-        original_len = len(self.book_list)
-        self.book_list = [b for b in self.book_list if str(b.book_id) != str(book_id)]
-        if len(self.book_list) < original_len:
-            self.save_books()  # Lưu lại sau khi xóa
-            return "Xóa thành công."
-        return "Không tìm thấy ID để xóa."
-
-    def find_book_by_id (self, book_id):
         for book in self.book_list:
             if str(book.book_id) == str(book_id):
-                return book
-        return None
-
-    def find_book_by_name (self, book_name):
-        search_name = book_name.lower()
-        for book in self.book_list:
-            if book.book_name.lower() == search_name:
-                return book
-        return None
+                self.book_list.remove(book)
+                self.save_book()
+                return True, "Xóa thành công."
+        return False, "Không tìm thấy sách để xóa."
 
     def search_book(self, keyword):
-        keyword = keyword.lower()
-        result = []
+        keyword = keyword.lower().strip()
+        results = []
         for book in self.book_list:
-            if (keyword in book.book_name.lower() or
-                keyword in book.author.lower() or
-                keyword in book.book_type.lower()):
-                 result.append(book) # Đưa vào danh sách result
-        return result
+            if (keyword in str(book.book_name).lower() or
+                keyword in str(book.author).lower() or
+                keyword in str(book.book_id).lower() or
+                keyword in str(book.book_type).lower()):
+                results.append(book)
+        return results
+
+    def update_book(self, updated_book):
+        for i, b in enumerate(self.book_list):
+            if str(b.book_id) == str(updated_book.book_id):
+                self.book_list[i] = updated_book
+                self.save_book()
+                return True, "Cập nhật thành công!"
+        return False, "Không tìm thấy ID sách để cập nhật!"
 
     def show_book(self):
         if not self.book_list:
-            print("Danh sách sách trống.")
+            return
         else:
             for book in self.book_list:
-                book.hien_thi()
+                book.hienthithongtin()
